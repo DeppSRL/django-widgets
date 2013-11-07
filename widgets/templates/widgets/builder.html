@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Widget{% if widget %} {{ widget.name }}{% else %}s{% endif %} builder</title>
+</head>
+<body>
+
+
+<div class="container">
+	{% if widget %}
+	<div class="page-header">
+		<h2><a href="{% url widgets-select %}" class="muted">Widgets</a> &raquo; {% block widget_title %}{{ widget.title }}{% endblock %}</h2>
+	</div>
+
+	<div class="row">
+    <div class="span4">
+      <form id="widget-builder" class="form-horizontal" action="." method="get">
+			  <fieldset>
+
+				  <legend>Configuration</legend>
+          {{ widget.form.as_p }}
+			    <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Generate</button>
+          </div>
+
+			  </fieldset>
+			</form>
+		</div>
+		<div class="span8">
+
+			<form>
+				<fieldset>
+
+					<legend>Preview</legend>
+					<div class="well text-center" id="embed_code_preview">{{ widget.get_embed_code }}</div>
+          <textarea name="embed_code" id="id_embed_code" rows="4" class="input-block-level"
+		          onClick="this.focus();this.select();">{{ widget.get_embed_code|force_escape }}</textarea>
+          <div class="muted">Copy and Paste the codes on to your page.</div>
+
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	{% else %}
+
+	<div class="page-header">
+		<h3>Seleziona un widget</h3>
+	</div>
+	<div class="row">
+		<div class="span12">
+			{% for code, title in available_widgets %}
+			<a class="btn" href="{% url widgets-build widget=code %}">{{ title }}</a>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+</div>
+
+</body>
+</html>
+
+

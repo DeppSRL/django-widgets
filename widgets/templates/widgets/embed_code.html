@@ -1,0 +1,16 @@
+<div class="widget" data-url="{{ widget.get_full_url }}"{% for key, value in data.items %}{% if value %} data-{{ key }}="{{ value|escape }}"{% endif %}{% endfor %}></div>
+<script>
+! function (d, w, s, id, url, c) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+		if (!d.getElementById(id)) {
+				w.djangoWidgetsClass = c;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = url;
+	      js.async = true;
+        fjs.parentNode.insertBefore(js, fjs);
+    }
+}(document, window, "script", "widgets-loader", "{{ widget.get_loader_url }}", "widget");
+</script>
+
+

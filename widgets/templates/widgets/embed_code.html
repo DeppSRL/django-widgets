@@ -1,16 +1,18 @@
-<div class="widget" data-url="{{ widget.get_full_url }}"{% for key, value in data.items %}{% if value %} data-{{ key }}="{{ value|escape }}"{% endif %}{% endfor %}></div>
-<script>
-! function (d, w, s, id, url, c) {
+<div class="{{ widget.get_class_name }}"{% for key, value in widget.get_html_data.items %} {% spaceless %}
+{% if value != None %} data-{{ key }}="{{ value|escape }}"{% endif %}{% endspaceless %}{% endfor %}></div>
+<script>!function (d, w, s, id, ns, url, wc, config) {
     var js, fjs = d.getElementsByTagName(s)[0];
-		if (!d.getElementById(id)) {
-				w.djangoWidgetsClass = c;
+    if (!w.hasOwnProperty(ns)) w[ns] = {};
+    if (w[ns][wc] === undefined) w[ns][wc] = config;
+    if ( !d.getElementById(id) ) {
         js = d.createElement(s);
         js.id = id;
         js.src = url;
-	      js.async = true;
+        js.async = true;
         fjs.parentNode.insertBefore(js, fjs);
     }
-}(document, window, "script", "widgets-loader", "{{ widget.get_loader_url }}", "widget");
-</script>
-
-
+}(document, window, "script", "widgets-loader", "widgets_loader_ns", "{{ widget.get_loader_url }}", "{{ widget.get_class_name }}", {
+  base_url:"{{ widget.get_base_url }}",
+  height:"{{ widget.get_height }}",
+  width:"{{ widget.get_width }}"
+});</script>

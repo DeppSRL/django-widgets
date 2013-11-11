@@ -63,9 +63,8 @@ class WidgetBuilderView(TemplateView, WidgetSelectorMixin):
     def get_context_data(self, **kwargs):
 
         context = super(WidgetBuilderView, self).get_context_data(**kwargs)
-        context['available_widgets'] = [(w.code, w.title) for w in self.widgets.values()]
-        if not self.get_widget_code() is None:
-            context['widget'] = self.get_widget()
+        context['available_widgets'] = [(w.code, w.name) for w in self.widgets.values()]
+        context['widget'] = self.get_widget()
         return context
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load url from future %}<!DOCTYPE html>
 <html>
 <head>
 	<title>Widget{% if widget %} {{ widget.name }}{% else %}s{% endif %} builder</title>
@@ -9,7 +9,7 @@
 <div class="container">
 	{% if widget %}
 	<div class="page-header">
-		<h2><a href="{% url widgets-select %}" class="muted">Widgets</a> &raquo; {% block widget_title %}{{ widget.title }}{% endblock %}</h2>
+		<h2><a href="{% url 'widgets-select' %}" class="muted">Widgets</a> &raquo; {% block widget_title %}{{ widget.name }}{% endblock %}</h2>
 	</div>
 
 	<div class="row">
@@ -50,7 +50,7 @@
 	<div class="row">
 		<div class="span12">
 			{% for code, title in available_widgets %}
-			<a class="btn" href="{% url widgets-build widget=code %}">{{ title }}</a>
+			<a class="btn" href="{% url 'widgets-build' widget=code %}">{{ title }}</a>
 			{% endfor %}
 		</div>
 	</div>

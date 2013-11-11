@@ -1,3 +1,5 @@
+var LOADER_NS = 'widgets_loader_ns';
+
 if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {
         'use strict';
@@ -101,9 +103,9 @@ var locateWidgetElements = function (className, tag, elm) {
 
     if (!w.console) w.console = {};
     if (!w.console.log) w.console.log = function () { };
-    if (!w.djangoWidgetsClass) w.djangoWidgetsClass = 'widget';
+    if (!w.hasOwnProperty(LOADER_NS)) w[LOADER_NS] = {};
 
-    var loadWidget = function(el){
+    var loadWidget = function(el, widget, config){
 
         var regex = /^data-(.+)/,
             paramsEmbed = {},
@@ -113,13 +115,14 @@ var locateWidgetElements = function (className, tag, elm) {
                 paramsEmbed[match[1]] = attr.value;
             }
         });
-        var width = paramsEmbed['width'] || 460,
-            height = paramsEmbed['height'] || 400,
-            url = paramsEmbed['url'] + '?' + encodeQueryData(paramsEmbed);
+//        var width = (paramsEmbed['width'] || width) || 460,
+//            height = (paramsEmbed['height'] || height) || 400,
+//            url = (paramsEmbed['base_url'] || base_url) + '?' + encodeQueryData(paramsEmbed);
         el.innerHTML = '<iframe allowtransparency="true" frameBorder="0" scrolling="no" ' +
             'style="border: none; max-width: 100%; min-width: 180px;" ' +
-            'width="'+width+'" height="'+height+'" ' +
-            'src="'+ url +'"></iframe>';
+            'width="'+(paramsEmbed['width'] || config['width'] || 460)+'" ' +
+            'height="'+(paramsEmbed['height'] || config['height'] || 400)+'" ' +
+            'src="'+ (paramsEmbed['base_url'] || config['base_url']) + '?' + encodeQueryData(paramsEmbed) +'"></iframe>';
     };
 
     var encodeQueryData = function(data) {
@@ -130,6 +133,7 @@ var locateWidgetElements = function (className, tag, elm) {
         for (var k in data) {
             if (!data.hasOwnProperty(k)) continue;
             if ( k.endsWith('_set') ) {
+                // this is a django-widgets convention
                 data[k].split(',').forEach(function(val){
                     ret.push(encodeURIComponent(k) + "=" + encodeURIComponent(val));
                 })
@@ -140,15 +144,18 @@ var locateWidgetElements = function (className, tag, elm) {
         return ret.join("&");
     };
 
-    var els = locateWidgetElements(w.djangoWidgetsClass),
-        nEls = els.length,
-        foundEls = [];
+    for(var widget in w[LOADER_NS]) {
+        var els = locateWidgetElements(widget),
+            nEls = els.length,
+            foundEls = [],
+            config = w[LOADER_NS][widget];
 
-    for(var i = 0; i < nEls; i++) {
-        var el = els[i];
-        if(foundEls.indexOf(el) < 0) {
-            foundEls.push(el);
-            loadWidget(el);
+        for(var i = 0; i < nEls; i++) {
+            var el = els[i];
+            if(foundEls.indexOf(el) < 0) {
+                foundEls.push(el);
+                loadWidget(el, widget, config);
+            }
         }
     }
 

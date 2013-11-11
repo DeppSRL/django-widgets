@@ -3,100 +3,22 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{% endspaceless %}<title>{% block widget_title %}{{ widget.get_title }}{% endblock %}</title>
-	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-    <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <script type="text/javascript" src="/static/js/css3-mediaqueries.js"></script>
-  <![endif]-->
-	{% block widget_styles %}
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
-	      rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-  {% endblock widget_styles %}
+	{% block widget_styles %}{% endblock widget_styles %}
 
   {% block widget_extra_styles %}
   <style type="text/css">
 		body { padding: 0; margin: 0; }
-		#widget-container { margin: 0; padding: 0; }
-		#widget-container tbody td { padding: 0; }
-		#widget-container tbody #stream { position: relative; width: 100%; overflow-x: hidden; overflow-y: auto; }
-		#widget-container tbody #stream li { padding: 8px; margin-top: 8px; }
-		#widget-container tbody #stream img.lazy { display: none; }
 	</style>
   {% endblock widget_extra_styles %}
 
   {% block widget_scripts %}
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-	<script src="//cdn.jsdelivr.net/jquery.lazyload/1.9.0/jquery.lazyload.min.js" type="text/javascript"></script>
   {% endblock widget_scripts %}
 </head>
 <body>
 
-<div class="row-fluid">
+{% block widget_body %}{{ widget.name }}{% endblock %}
 
-	<div class="span12">
-    {% block widget_container %}
-		<table id="widget-container" class="table table-bordered">
-      {% block widget_header %}
-			<thead class="{% block widget_header_class %}{% endblock %}">
-			<tr>
-				<td><b>{% block widget_header_title %}{{ params.title|default:widget.get_title }}{% endblock %}</b></td>
-			</tr>
-			</thead>
-      {% endblock widget_header %}
-      {% block widget_body %}
-			<tbody>
-			<tr>
-				<td>
-					<div id="stream">
-						{% block widget_content %}{% endblock %}
-					</div>
-				</td>
-			</tr>
-			</tbody>
-      {% endblock widget_body %}
-      {% block widget_footer %}
-			<tfoot class="{% block widget_footer_class %}{% endblock %}">
-			<tr>
-				<td>
-					<div class="pull-right">{% block widget_credits %}{% endblock %}</div>
-					<div>{{ params.footer|default:"" }}</div>
-				</td>
-			</tr>
-			</tfoot>
-      {% endblock widget_footer %}
-		</table>
-    {% endblock widget_container %}
-	</div>
-
-</div>
-{% block widget_extra %}
-<script type="text/javascript">
-	$(function () {
-		var $container = $('#widget-container'),
-				$header = $container.find('thead'),
-				$footer = $container.find('tfoot'),
-
-				required_height = parseInt("{{ params.height|default:'400' }}", 10),
-				header_height = $header.length > 0 ? $header.outerHeight(true): 0,
-				footer_height = $footer.length > 0 ? $footer.outerHeight(true): 0;
-
-		$container.find('#stream').css({
-			'height': required_height - header_height - footer_height - 3
-		});
-
-		$("img.lazy").show().lazyload({
-			effect: "fadeIn",
-			container: $("#stream")
-		});
-
-		$('abbr, .tips').tooltip();
-
-	});
-</script>
-{% endblock widget_extra %}
+{% block widget_extra %}{% endblock widget_extra %}
 </body>
 </html>

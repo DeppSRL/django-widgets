@@ -1,0 +1,11 @@
+{% extends 'widgets/widget.html' %}
+
+{% block widget_content %}
+  <ul class="unstyled">
+  {% if 'a' in widget.data.component_set %}<li>First choice</li>{% endif %}
+  {% if 'b' in widget.data.component_set %}<li>Second choice</li>{% endif %}
+  {% if 'c' in widget.data.component_set %}<li>Third choice</li>{% endif %}
+  </ul>
+
+  [{% for c in widget.data.component_set %}<b>{{ c }}</b> {% endfor %}]
+{% endblock %}

@@ -9,6 +9,7 @@ from django.utils.http import urlencode
 
 class WidgetFormMixin(object):
 
+    form = None
     form_class = Form
     initial = {}
     prefix = None
@@ -41,11 +42,11 @@ class WidgetFormMixin(object):
         """
         return self.prefix
 
-    def get_data(self, default=None):
+    def get_data(self):
         """
         Returns the widget configuration.
         """
-        return self.data or default
+        return self.data
 
     def get_form_kwargs(self):
         """
@@ -59,10 +60,9 @@ class WidgetFormMixin(object):
         return kwargs
 
     def get_form(self):
-        """
-        Returns an instance of the form to be used in this view.
-        """
-        return self.get_form_class()(**self.get_form_kwargs())
+        if self.form is None:
+            return self.get_form_class()(**self.get_form_kwargs())
+        return self.form
 
     def is_valid(self):
         return self.form.is_valid()
@@ -105,18 +105,11 @@ class Widget(WidgetTemplateMixin, WidgetFormMixin):
     def get_title(self):
         return getattr(self, 'title', self.name)
 
-    def _get_size(self, size):
-        if size not in ('height', 'width'):
-            raise Exception("invalid size '{0}'".format(size))
-        if self.data:
-            return self.data.get(size, getattr(self, size))
-        return getattr(self, size)
-
     def get_height(self):
-        return self._get_size('height')
+        return self.data.get('height', self.height)
 
     def get_width(self):
-        return self._get_size('width')
+        return self.data.get('width', self.width)
 
     def get_template_name(self):
         return super(Widget, self).get_template_name() or 'widgets/{0}_widget.html'.format(self.code)
@@ -176,5 +169,7 @@ class Widget(WidgetTemplateMixin, WidgetFormMixin):
         return "{0}{1}".format(self.code, self.class_name_suffix)
 
     def get_embed_code(self):
+        if not self.is_valid():
+            return ''
         return render_to_string(self.embed_template, {'widget': self})
 

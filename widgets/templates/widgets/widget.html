@@ -29,11 +29,10 @@
     {% endfor %}
   </div>
   {% endif %}
-
 	<ul>
-    {% for field in widget.form %}
+    {% for field in widget.form %}{% if field.errors %}
     <li>{{ field.errors|striptags }}</li>
-    {% endfor %}
+    {% endif %}{% endfor %}
 	</ul>
 </div>
 {% endif %}

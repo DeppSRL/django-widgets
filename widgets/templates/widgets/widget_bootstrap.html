@@ -36,11 +36,11 @@
 		<table id="widget-container" class="table table-bordered">
 
       {% with title=widget.get_title %}{% if title %}
-			<thead class="{% block widget_header_class %}{% endblock %}">
+			<thead class="{% block widget_header_class %}{% endblock %}">{% block widget_header %}
 			<tr>
 				<td><b>{% block widget_header_title %}{{ title }}{% endblock %}</b></td>
 			</tr>
-			</thead>
+			{% endblock widget_header %}</thead>
       {% endif %}{% endwith %}
 
       <tbody>
@@ -53,13 +53,13 @@
 			</tr>
 			</tbody>
 
-			<tfoot class="{% block widget_footer_class %}{% endblock %}">
+			<tfoot class="{% block widget_footer_class %}{% endblock %}">{% block widget_footer %}
 			<tr>
 				<td>
           <div class="text-right">{% block widget_credits %}{% endblock %}</div>
 				</td>
 			</tr>
-			</tfoot>
+			{% endblock widget_footer %}</tfoot>
 
 		</table>
     {% endblock widget_container %}

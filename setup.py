@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-widgets',
-    version='0.1.1-dev',
+    version='0.1.2-dev',
     packages=['widgets'],
     include_package_data=True,
     license='BSD License',  # example license

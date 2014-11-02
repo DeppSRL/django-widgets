@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.utils import importlib
 from django.views.generic import TemplateView
 from django.conf import settings
+from collections import OrderedDict
 
 
 WIDGETS = getattr(settings, 'WIDGETS', None) or []
@@ -37,7 +38,7 @@ class WidgetSelectorMixin(object):
     @property
     def widgets(self):
         if not hasattr(self, 'widget_classes'):
-            setattr(self, 'widget_classes', {})
+            setattr(self, 'widget_classes', OrderedDict())
             for path in WIDGETS:
                 widget_class = import_widget(path)
                 self.widget_classes[widget_class.code] = widget_class
